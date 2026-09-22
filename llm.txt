@@ -1,0 +1,474 @@
+## Prompt
+
+Help me implement nav bar resizing in HTML/CSS/JS. Navigation bar must be larger when users are at the top of the page. As users start scrolling down, it should resize and become smaller. Note that the text font size should also start larger and become smaller as users scroll down
+
+## Response
+
+```
+Yes. The cleanest approach is to toggle a .scrolled class with JS, while SCSS handles the smooth interpolation.
+
+<nav class="navbar" id="navbar">
+  <a class="navbar__logo" href="/">Logo</a>
+
+  <div class="navbar__links">
+    <a href="#about">About</a>
+    <a href="#work">Work</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+.navbar {
+  --nav-height: 90px;
+  --font-size: 1.125rem;
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+
+  height: var(--nav-height);
+  padding: 0 2rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  background: rgba(255, 255, 255, 0.95);
+  transition:
+    height 300ms ease,
+    padding 300ms ease,
+    box-shadow 300ms ease;
+
+  a {
+    font-size: var(--font-size);
+    transition: font-size 300ms ease;
+  }
+
+  &.scrolled {
+    --nav-height: 60px;
+    --font-size: 0.9rem;
+
+    padding-inline: 1.5rem;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  }
+}
+
+Then use a small scroll listener:
+
+const navbar = document.querySelector("#navbar");
+
+const updateNavbar = () => {
+  navbar.classList.toggle("scrolled", window.scrollY > 40);
+};
+
+window.addEventListener("scroll", updateNavbar, { passive: true });
+updateNavbar();
+
+This gives you a large navbar at the top, then smoothly transitions to the smaller version after 40px of scrolling.
+
+For an even smoother effect, you can avoid the hard scrolled threshold entirely and use clamp() + a CSS custom property driven by requestAnimationFrame, allowing the navbar/font size to continuously shrink as the user scrolls.
+```
+
+## Prompt
+
+Generate a paragraph to introduce the common types of coffee beans.
+
+## Response
+
+```
+Coffee beans come in several varieties, each offering a distinct flavor, aroma, and level of acidity. The four main types are Arabica, Robusta, Liberica, and Excelsa. Arabica is known for its smooth, complex flavor, while Robusta tends to have a stronger, more bitter taste and higher caffeine content. Liberica and Excelsa are less common and are valued for their distinctive, often fruity and smoky flavor profiles. Together, these varieties provide coffee drinkers with a wide range of tastes and experiences.
+```
+
+## Prompt
+
+How would you make a Carousel in a HTML/SCSS/JS static site? No frameworks allowed.
+
+## Response
+
+A framework-free carousel is basically three pieces:
+
+HTML — the viewport, slides, and controls.
+
+SCSS — hide overflow and position slides.
+
+JavaScript — track the current index and translate the slide track.
+
+Here’s a clean implementation that supports previous/next buttons, dots, keyboard navigation, and touch swiping.
+
+HTML
+<section class="carousel" aria-label="Featured content">
+  <div class="carousel__viewport">
+    <div class="carousel__track">
+      <article class="carousel__slide">
+        <img src="images/slide-1.jpg" alt="Description of slide one">
+        <h2>Slide One</h2>
+      </article>
+
+      <article class="carousel__slide">
+        <img src="images/slide-2.jpg" alt="Description of slide two">
+        <h2>Slide Two</h2>
+      </article>
+
+      <article class="carousel__slide">
+        <img src="images/slide-3.jpg" alt="Description of slide three">
+        <h2>Slide Three</h2>
+      </article>
+    </div>
+  </div>
+
+  <button
+    class="carousel__button carousel__button--prev"
+    type="button"
+    aria-label="Previous slide"
+  >
+    ←
+  </button>
+
+  <button
+    class="carousel__button carousel__button--next"
+    type="button"
+    aria-label="Next slide"
+  >
+    →
+  </button>
+
+  <div class="carousel__dots" aria-label="Choose a slide">
+    <button type="button" aria-label="Go to slide 1"></button>
+    <button type="button" aria-label="Go to slide 2"></button>
+    <button type="button" aria-label="Go to slide 3"></button>
+  </div>
+</section>
+
+SCSS
+.carousel {
+  --gap: 1rem;
+
+  position: relative;
+  max-width: 800px;
+  margin: 0 auto;
+
+  &__viewport {
+    overflow: hidden;
+    border-radius: 1rem;
+  }
+
+  &__track {
+    display: flex;
+    transition: transform 350ms ease;
+    will-change: transform;
+  }
+
+  &__slide {
+    flex: 0 0 100%;
+    min-width: 0;
+
+    padding: 2rem;
+    box-sizing: border-box;
+    background: #f2f2f2;
+
+    img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      border-radius: 0.5rem;
+    }
+  }
+
+  &__button {
+    position: absolute;
+    top: 50%;
+    z-index: 2;
+
+    width: 3rem;
+    height: 3rem;
+
+    border: 0;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    cursor: pointer;
+
+    transform: translateY(-50%);
+
+    &--prev {
+      left: 1rem;
+    }
+
+    &--next {
+      right: 1rem;
+    }
+
+    &:disabled {
+      opacity: 0.3;
+      cursor: default;
+    }
+  }
+
+  &__dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+
+    button {
+      width: 0.7rem;
+      height: 0.7rem;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      background: #ccc;
+      cursor: pointer;
+
+      &[aria-current="true"] {
+        background: #222;
+      }
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &__track {
+      transition: none;
+    }
+  }
+}
+
+JavaScript
+const carousel = document.querySelector(".carousel");
+const track = carousel.querySelector(".carousel__track");
+const slides = [...carousel.querySelectorAll(".carousel__slide")];
+
+const prevButton = carousel.querySelector(".carousel__button--prev");
+const nextButton = carousel.querySelector(".carousel__button--next");
+const dots = [...carousel.querySelectorAll(".carousel__dots button")];
+
+let currentIndex = 0;
+
+function goToSlide(index) {
+  currentIndex = Math.max(0, Math.min(index, slides.length - 1));
+
+  track.style.transform = `translateX(-${currentIndex * 100}%)`;
+
+  updateControls();
+}
+
+function updateControls() {
+  prevButton.disabled = currentIndex === 0;
+  nextButton.disabled = currentIndex === slides.length - 1;
+
+  dots.forEach((dot, index) => {
+    dot.setAttribute(
+      "aria-current",
+      index === currentIndex ? "true" : "false"
+    );
+  });
+
+  slides.forEach((slide, index) => {
+    slide.setAttribute(
+      "aria-hidden",
+      index === currentIndex ? "false" : "true"
+    );
+  });
+}
+
+prevButton.addEventListener("click", () => {
+  goToSlide(currentIndex - 1);
+});
+
+nextButton.addEventListener("click", () => {
+  goToSlide(currentIndex + 1);
+});
+
+dots.forEach((dot, index) => {
+  dot.addEventListener("click", () => {
+    goToSlide(index);
+  });
+});
+
+carousel.addEventListener("keydown", (event) => {
+  if (event.key === "ArrowLeft") {
+    goToSlide(currentIndex - 1);
+  }
+
+  if (event.key === "ArrowRight") {
+    goToSlide(currentIndex + 1);
+  }
+});
+
+updateControls();
+
+Adding touch/swipe support
+You can layer pointer events on top without needing a library:
+
+let pointerStartX = 0;
+let pointerCurrentX = 0;
+let isDragging = false;
+
+const viewport = carousel.querySelector(".carousel__viewport");
+
+viewport.addEventListener("pointerdown", (event) => {
+  pointerStartX = event.clientX;
+  pointerCurrentX = event.clientX;
+  isDragging = true;
+
+  viewport.setPointerCapture(event.pointerId);
+});
+
+viewport.addEventListener("pointermove", (event) => {
+  if (!isDragging) return;
+
+  pointerCurrentX = event.clientX;
+});
+
+viewport.addEventListener("pointerup", () => {
+  if (!isDragging) return;
+
+  const distance = pointerCurrentX - pointerStartX;
+  const threshold = 50;
+
+  if (Math.abs(distance) >= threshold) {
+    if (distance < 0) {
+      goToSlide(currentIndex + 1);
+    } else {
+      goToSlide(currentIndex - 1);
+    }
+  }
+
+  isDragging = false;
+});
+
+The important architectural idea is that the slides don't need to know where they are. JavaScript maintains a single currentIndex, and CSS does the visual work:
+
+currentIndex = 0  → translateX(0%)
+currentIndex = 1  → translateX(-100%)
+currentIndex = 2  → translateX(-200%)
+
+For a production carousel, I'd also consider infinite looping, autoplay with pause-on-hover/focus, proper focus management, and making the number of visible slides responsive.
+
+## Prompt
+
+I want to spawn a HTML dialog tag modal, the modal contains an image and paragraph. I am using HTML/SCSS/JS, no frameworks allowed.
+
+## Response
+
+Absolutely. The native HTML <dialog> element is a good fit here—no framework is needed. You can use showModal() to open it and close() to dismiss it.
+
+HTML
+<button id="openModal">Open modal</button>
+
+<dialog id="myModal">
+  <div class="modal">
+    <button class="modal__close" id="closeModal" aria-label="Close">
+      &times;
+    </button>
+
+    <img
+      class="modal__image"
+      src="https://picsum.photos/600/400"
+      alt="Example image"
+    />
+
+    <div class="modal__content">
+      <h2>Modal title</h2>
+      <p>
+        This is some content inside the modal. You can put any HTML you need
+        here, including images, paragraphs, buttons, forms, and more.
+      </p>
+    </div>
+  </div>
+</dialog>
+
+SCSS
+dialog {
+  width: min(90%, 600px);
+  padding: 0;
+  border: 0;
+  border-radius: 12px;
+  overflow: hidden;
+
+  &::backdrop {
+    background: rgb(0 0 0 / 60%);
+  }
+}
+
+.modal {
+  position: relative;
+  background: #fff;
+
+  &__image {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  &__content {
+    padding: 1.5rem;
+
+    h2 {
+      margin-top: 0;
+    }
+
+    p {
+      margin-bottom: 0;
+      line-height: 1.6;
+    }
+  }
+
+  &__close {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+
+    width: 2rem;
+    height: 2rem;
+
+    border: 0;
+    border-radius: 50%;
+
+    background: rgb(0 0 0 / 60%);
+    color: #fff;
+
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+
+    &:hover {
+      background: rgb(0 0 0 / 80%);
+    }
+  }
+}
+
+JavaScript
+const modal = document.querySelector("#myModal");
+const openButton = document.querySelector("#openModal");
+const closeButton = document.querySelector("#closeModal");
+
+openButton.addEventListener("click", () => {
+  modal.showModal();
+});
+
+closeButton.addEventListener("click", () => {
+  modal.close();
+});
+
+// Close when clicking the backdrop
+modal.addEventListener("click", (event) => {
+  if (event.target === modal) {
+    modal.close();
+  }
+});
+
+The important distinction is:
+
+modal.showModal();
+
+rather than:
+
+modal.show();
+
+showModal() makes the <dialog> a modal dialog: the rest of the page becomes inert and the browser provides the backdrop.
+
+You also get Escape-to-close automatically with <dialog> when opened via showModal().
+
+If you want the modal to be spawned dynamically from JavaScript rather than having the <dialog> already present in the HTML, that's also straightforward.
