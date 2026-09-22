@@ -1,13 +1,135 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta charset="utf-8" />
         <meta http-equiv="x-ua-compatible" content="ie=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>MP1</title>
+        <title>Coffee Site</title>
+        <link rel="stylesheet" href="css/main.scss">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" >
     </head>
+
     <body>
-        <h1>Hello World! Welcome to MP1!</h1>
-        <img src="assets/image.jpg">
+        <header>
+            <nav class="navbar" id="navbar">
+                <a href="#introduction">Introduction</a>
+                <a href="#beans">Beans</a>
+                <a href="#brewing">Brewing</a>
+                <a href="#health">Health</a>
+                <a href="#about" id="aboutModal">About</a>
+            </nav>
+        </header>
+
+        <main>
+            <div class="section">
+                <video width="100%" height="auto" autoplay muted loop playsinline>
+                    <source src="assets/video.mp4" type="video/mp4">
+                    HTML video tags not supported.
+                </video>
+            </div>
+
+            <div class="section" id="introduction">
+                <h2>Introduction</h2>
+                <p>
+                Coffee is more than a morning ritual—it’s a journey of flavors, aromas, and traditions. From the bold, earthy character of Arabica and Robusta beans to the unique qualities of Liberica and Excelsa, each type of coffee bean offers a distinct experience. Explore different brewing methods, from classic drip and French press to espresso and pour-over, and discover how technique can transform the flavor in your cup. Along the way, learn about the potential health benefits of coffee, including its natural antioxidants and caffeine, while understanding the importance of enjoying it in moderation. Whether you’re a lifelong coffee lover or just beginning to explore, this is your guide to making every cup more flavorful and meaningful.
+                </p>
+            </div>
+
+            <div class="section" id="beans">
+                <h2>Beans</h2>
+                <p>
+                Coffee beans come in several varieties, each offering a distinct flavor, aroma, and level of acidity. The four main types are Arabica, Robusta, Liberica, and Excelsa. Arabica is known for its smooth, complex flavor, while Robusta tends to have a stronger, more bitter taste and higher caffeine content. Liberica and Excelsa are less common and are valued for their distinctive, often fruity and smoky flavor profiles. Together, these varieties provide coffee drinkers with a wide range of tastes and experiences.
+
+                </p>
+                <div class="bg_image_section">
+                </div>
+            </div>
+
+            <div class="section" id="brewing">
+                <h2>Brewing</h2>
+                <p>
+                Brewing coffee is an art that brings out the unique flavors and aromas of each bean. From the rich intensity of espresso to the smooth simplicity of a French press or pour-over, every method creates a different coffee experience. Discover how grind size, water temperature, and brewing time can transform your cup.
+                </p>
+                <div id="container">
+                    <div id="column1">
+                        <h3>Grind Size</h3>
+                        <p>Grind size determines how quickly water extracts flavor from coffee grounds. Fine grinds provide more surface area and extract faster, making them ideal for espresso. Medium grinds work well for drip coffee, while coarse grinds are commonly used for French press.</p>
+                    </div>
+
+                    <div id="column2">
+                        <h3>Temperature</h3>
+                        <p>Water temperature affects how efficiently flavors and compounds are extracted from the coffee grounds. Water that is too hot can lead to excessive extraction and harsh or bitter flavors, while water that is too cool may produce a flat or sour-tasting cup.</p>
+                    </div>
+
+                    <div id="column3">
+                        <h3>Brewing Time</h3>
+                        <p>Brewing time controls how long water remains in contact with the coffee grounds. Shorter brewing times generally produce less extraction, while longer times allow more compounds to dissolve into the water. </p>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="section" id="health">
+                <h2>Health</h2>
+                <section class="carousel" aria-label="Featured content">
+                    <div class="carousel_viewport">
+                        <div class="carousel_track">
+                            <article class="carousel_slide">
+                                <img src="assets/coffee1.jpg" alt="Description of slide one">
+                            </article>
+
+                            <article class="carousel_slide">
+                                <img src="assets/coffee2.jpg" alt="Description of slide two">
+                            </article>
+
+                            <article class="carousel_slide">
+                                <img src="assets/coffee3.jpg" alt="Description of slide three">
+                            </article>
+                        </div>
+                    </div>
+
+                    <button class="carousel_button carousel_button--prev" type="button" aria-label="Previous slide" >
+                    </button>
+
+                        <button class="carousel_button carousel_button--next" type="button" aria-label="Next slide" >
+                        </button>
+                </section>
+                <p>
+                Coffee can have several potential health effects when consumed in moderation. Its caffeine may increase alertness, attention, and energy, while coffee also contains antioxidants and other compounds that may contribute to overall health.
+                </p>
+                <p>
+                Research has associated regular coffee consumption with a lower risk of certain conditions, although individual responses can vary. However, too much caffeine may cause sleep problems, anxiety, headaches, or a rapid heartbeat, so moderation and personal tolerance are important when enjoying coffee.
+                </p>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; <span id="year"></span> Coffee Site. All coffee served.</p>
+        </footer>
+
+        <dialog id="modal">
+            <div class="modal">
+                <button class="modal__close" id="closeModal" aria-label="Close">
+                    &times;
+                </button>
+
+                <div class="modal__content">
+                    <h2>About</h2>
+                    <p>
+                    This is a coffee site, a site dedicated to coffee. Coffee is love, coffee is life.
+                    </p>
+                    <p>
+                    Reach us at <a href="https://github.com/x2w-soda/cs409-fa26-mp1" target="_blank">Github</a>
+                    </p>
+                </div>
+            </div>
+        </dialog>
+
+        <script src="js/main.js"></script>
     </body>
 </html>
+
